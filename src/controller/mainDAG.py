@@ -1,6 +1,7 @@
 from src.controller.BQLoadJob import BQLoader
 from src.controller.SFLKLoadJob import SFLKLoader
 from src.config.Salesforce_Config import SalesForceConfig
+from src.config.DAGS_Config import DAGSConfig
 import pandas as pd
 
 class DAGControl:
@@ -21,3 +22,9 @@ class DAGControl:
 
         print('STARTING SNOWFLAKE LOADING')
         self._sflkLoader._start_loading(df)
+    
+
+class DAGBuilder:
+    def create_dag(self):
+        dag_obj = DAGSConfig(dag_name='',schedule_interval='',dag_owner='',dag_start_date='',operator_email='',email_on_failure=True,email_on_retry=False,timezone='US/Eastern')
+        return dag_obj._get_DAGObj()

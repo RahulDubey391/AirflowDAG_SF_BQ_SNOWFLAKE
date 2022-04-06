@@ -1,15 +1,17 @@
-from airflow import DAG
-from airflow.operators.python_operator import PytonOpertor
+from src.controller.mainDAG import DAGBuilder, DAGControl
+from airflow.operators.python_operator import PythonOperator
 
-from goolge.cloud import bigquery
+def run_DAG(**context):
+    dag_flow = DAGControl()
+    dag_flow._start_loading()
 
-from snowflake.connector.pandas_tools import write_pandas
+builder = DAGBuilder()
+dag = builder.create_dag()
 
-from simple_salesforce import SalesForce
-
-from datetime import datetime
-import pendulum
-import logging
-import pandas
-import pandas_gbq
-
+with dag:
+    task = PythonOperator(
+        task_id='SFLK_BQ_LOADER',
+        python_callable=run_DAG,
+        provide_context=False,
+        dag=dag
+    )    
